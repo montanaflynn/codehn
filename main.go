@@ -248,6 +248,21 @@ func pageHandler(pageType string) func(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// fileHandler serves a file like the favicon or logo
+func fileHandler(file string) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		switch file {
+		case "favicon":
+			http.ServeFile(w, r, "./favicon.ico")
+		case "logo":
+			http.ServeFile(w, r, "./logo.gif")
+		default:
+			w.WriteHeader(404)
+			w.Write([]byte("file not found"))
+		}
+	}
+}
+
 // the main attraction, what you've all been waiting for
 func main() {
 
@@ -260,10 +275,9 @@ func main() {
 	http.HandleFunc("/show", pageHandler("show"))
 	http.HandleFunc("/best", pageHandler("best"))
 
-	// serve the favicon file
-	http.HandleFunc("/favicon.ico", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "./favicon.ico")
-	})
+	// serve the favicon and logo files
+	http.HandleFunc("/favicon.ico", fileHandler("favicon"))
+	http.HandleFunc("/logo.gif", fileHandler("logo"))
 
 	// start the server up on our port
 	log.Printf("Running on %s\n", port)
