@@ -1,0 +1,144 @@
+<html>
+  <head>
+    <link rel="icon" href="https://news.ycombinator.com/favicon.ico">
+    <link rel='stylesheet' href="https://news.ycombinator.com/news.css">
+    <style>
+      body {
+        background: white;
+        font-family: "Verdana", "Geneva", sans-serif;
+      }
+
+      #container {
+        background: #f6f6ef;
+        width: 100%;
+        max-width: 780px;
+        margin: 0 auto;
+        padding-bottom: 10px;
+      }
+
+      #header {
+        background: #ff6600;
+        color: #000000;
+        height: 24px;
+      }
+
+      #header a, #header a:visited, #header a:link {
+        color: #000000;
+      }
+
+      #header span {
+        font-weight: bold;
+        position: relative;
+        bottom: 7px;
+        left: -2px;
+      }
+
+      #header img {
+        margin: 2px;
+        border: 1px solid white;
+      }
+
+      #header ul {
+        display: inline;
+        margin: 0;
+        padding: 0;
+        position: relative;
+        float: right;
+        top: 3px;
+        right: 7px;
+      }
+
+      #header ul li {
+        display: inline;
+      }
+
+      #header ul li:first-child {
+        padding-right: 2px;
+      }
+
+      ul {
+        list-style-type: none;
+        padding-left: 10px;
+      }
+
+      ul li {
+        margin: 10px 0;
+      }
+
+      ul li .meta a, ul li .meta a:visited, ul li .meta a:link {
+        color: #828282;
+      }
+
+      ul li a.active {
+        color: #ffffff!important;
+      }
+
+      ul li a:hover {
+        text-decoration: underline;
+      }
+
+      .title {
+        font-size: 14px;
+      }
+
+      .link {
+        color: #828282;
+        font-size: 12px;
+      }
+
+      .meta {
+        color: #828282;
+        display: block;
+        font-size: 10px;
+      }
+
+      #footer {
+        text-align: center;
+      }
+
+      #footer a:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  </body>
+    <div id="container">
+      <div id="header">
+        <a href="/">
+          <img src="https://news.ycombinator.com/y18.gif"/>
+          <span>Code on Hacker News</span>
+        </a>
+        <ul>
+          <li><a href="/" {{if eq .Page "top"}} class="active" {{end}}>
+            top
+          </a></li>
+          <li>|</li>
+          <li><a href="/new" {{if eq .Page "new"}} class="active" {{end}}>
+            new
+          </a></li>
+          <li>|</li>
+          <li><a href="/show" {{if eq .Page "show"}} class="active" {{end}}>
+            show
+          </a></li>
+          <li>|</li>
+          <li><a href="/best" {{if eq .Page "best"}} class="active" {{end}}>
+            best
+          </a></li>
+        </ul>
+      </div>
+      <div id="links">
+        <ul>{{range .Stories}}
+          <li>
+            <a class="title" href="{{.URL}}">{{.Title}}</a>
+            <span class="link">(github.com)</span>
+            <span class="meta">{{.Score}} points by
+              <a href="https://news.ycombinator.com/user?id={{.By}}">{{.By}}</a>
+              <a href="https://news.ycombinator.com/item?id={{.ID}}">{{.HumanTime}}</a> |
+              <a href="https://news.ycombinator.com/item?id={{.ID}}">{{.Descendants}} comments</a>
+            </span>
+          </li>{{end}}
+        </ul>
+      </div>
+    </div>
+  </body>
+</html>
