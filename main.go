@@ -260,6 +260,11 @@ func main() {
 	http.HandleFunc("/show", pageHandler("show"))
 	http.HandleFunc("/best", pageHandler("best"))
 
+	// serve the favicon file
+	http.HandleFunc("/favicon.ico", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "./favicon.ico")
+	})
+
 	// start the server up on our port
 	log.Printf("Running on %s\n", port)
 	log.Fatalln(http.ListenAndServe(port, nil))
