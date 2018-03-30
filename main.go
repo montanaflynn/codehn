@@ -131,13 +131,19 @@ func getStories(res *http.Response) (stories, error) {
 				return
 			}
 
+			// parse the url
+			u, err := url.Parse(s.URL)
+			if err != nil {
+				return
+			}
+
+			// get the hostname from the url
+			h := u.Hostname()
+
 			// check if it's from github or gitlab before adding to stories
-			if strings.Contains(s.URL, "github") || strings.Contains(s.URL, "gitlab") {
+			if strings.Contains(h, "github") || strings.Contains(h, "gitlab") {
 				s.HumanTime = humanize.Time(time.Unix(int64(s.Time), 0))
-				hostName, err := url.Parse(s.URL)
-				if err == nil {
-					s.DomainName = hostName.Hostname()
-				}
+				s.DomainName = h
 				stories = append(stories, s)
 			}
 
