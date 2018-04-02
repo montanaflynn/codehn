@@ -113,7 +113,7 @@ func getStories(res *http.Response) (stories, error) {
 			}()
 
 			// get the story with reckless abandon for errors
-			keyURL := fmt.Sprintf(baseURL+"v0/item/%d.json", storyKey)
+			keyURL := fmt.Sprintf(baseURL+"item/%d.json", storyKey)
 			res, err := http.Get(keyURL)
 			if err != nil {
 				return
