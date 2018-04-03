@@ -60,6 +60,8 @@ type story struct {
 // stories is just a bunch of story pointers
 type stories []*story
 
+var storiesMutex sync.Mutex
+
 // getStories if you couldn't guess it, gets the stories
 func getStories(res *http.Response) (stories, error) {
 
@@ -86,7 +88,10 @@ func getStories(res *http.Response) (stories, error) {
 	for _, key := range keys {
 
 		// stop when we have 30 stories
-		if len(stories) >= 30 {
+		storiesMutex.Lock()
+		storiesCnt := len(stories)
+		storiesMutex.Unlock()
+		if storiesCnt >= 30 {
 			break
 		}
 
@@ -114,13 +119,13 @@ func getStories(res *http.Response) (stories, error) {
 
 			// get the story with reckless abandon for errors
 			keyURL := fmt.Sprintf(baseURL+"item/%d.json", storyKey)
-			res, err := http.Get(keyURL)
+			resp, err := http.Get(keyURL)
 			if err != nil {
 				return
 			}
-			defer res.Body.Close()
+			defer resp.Body.Close()
 
-			body, err = ioutil.ReadAll(res.Body)
+			body, err := ioutil.ReadAll(resp.Body)
 			if err != nil {
 				return
 			}
@@ -144,7 +149,9 @@ func getStories(res *http.Response) (stories, error) {
 			if strings.Contains(h, "github") || strings.Contains(h, "gitlab") {
 				s.HumanTime = humanize.Time(time.Unix(int64(s.Time), 0))
 				s.DomainName = h
+				storiesMutex.Lock()
 				stories = append(stories, s)
+				storiesMutex.Unlock()
 			}
 
 		}(key)
